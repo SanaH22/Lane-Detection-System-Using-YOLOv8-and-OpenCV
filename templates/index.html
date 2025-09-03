@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lane & Car Detection</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #004b80;
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 50px;
+      margin-bottom: 40px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .btn {
+      background: #66aee0;
+      border: none;
+      padding: 15px 40px;
+      font-size: 18px;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #468bb7;
+    }
+
+    .output-section {
+  display: flex;            /* flex container for horizontal layout */
+  align-items: center;      /* vertically center heading and media */
+  gap: 20px;                /* space between heading and media */
+  justify-content: Center;  /* center the whole section horizontally */
+  width: 80%;
+  margin: 0 auto 50px auto;
+}
+
+.output-section h3 {
+  font-size: 20px;
+  margin: 0;               /* remove bottom margin */
+  flex-shrink: 0;          /* prevent heading from shrinking */
+}
+
+.output-section img,
+.output-section video {
+  max-width: 60%;           /* adjust size of media */
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+  </style>
+</head>
+<body>
+  <h1>Lane Detection System Using YOLOv8 and OpenCVv</h1>
+
+  <div class="button-container">
+    <!-- Image Upload -->
+    <form method="POST" enctype="multipart/form-data" action="/upload-image">
+      <input type="file" name="image_file" id="image-upload" accept="image/*" style="display:none;" required onchange="this.form.submit()">
+      <label for="image-upload" class="btn">Upload Image</label>
+    </form>
+
+    <!-- Video Upload -->
+    <form method="POST" enctype="multipart/form-data" action="/upload-video">
+      <input type="file" name="video_file" id="video-upload" accept="video/*" style="display:none;" required onchange="this.form.submit()">
+      <label for="video-upload" class="btn">Upload Video</label>
+    </form>
+  </div>
+
+  <div class="output-section">
+    <h3>Output:</h3>
+  
+    {% if output_type == 'image' %}
+      <!-- Image is passed as base64 string -->
+      <img src="data:image/jpeg;base64,{{ output_image }}" alt="Processed Image">
+  
+    {% elif output_type == 'video' %}
+      <!-- Stream video from Flask route -->
+      <img src="{{ url_for('video_feed', filename=output_file) }}" alt="Processed Video Stream">
+  
+    {% else %}
+      <!-- Placeholder div to keep layout consistent -->
+      <div style="width:60%;"></div>
+    {% endif %}
+  </div>
+  
+  
+</body>
+</html>
